@@ -29,12 +29,7 @@ const navigation = [
     icon: UsersIcon,
     current: false,
   },
-  {
-    name: "My Projects",
-    href: "my-projects",
-    icon: FolderIcon,
-    current: false,
-  },
+  
 ];
 type LayoutProps = {
   children: React.ReactNode; // This allows any valid JSX content
