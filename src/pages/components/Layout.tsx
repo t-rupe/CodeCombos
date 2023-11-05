@@ -18,12 +18,14 @@ import {
 import { signIn, signOut, useSession } from "next-auth/react";
 import DefaultImage from "../../../public/defaultprofilepic.png";
 import HomeContent from "./HomePageContent";
+import CreateStack from "./CreateStack";
+import { useRouter } from "next/router";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
   {
     name: "Get New Stack",
-    href: "/create-a-stack",
+    href: "/createstack",
     icon: UsersIcon,
     current: false,
   },
@@ -34,16 +36,20 @@ const navigation = [
     current: false,
   },
 ];
+type LayoutProps = {
+  children: React.ReactNode; // This allows any valid JSX content
+};
 
-const userNavigation = [{ name: "Sign out", href: "#" }];
+const userNavigation = [{ name: "Sign out", href: "/" }];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function HomePage() {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <>
@@ -128,7 +134,7 @@ export default function HomePage() {
                                   className={classNames(
                                     item.current
                                       ? "bg-gray-800 text-white"
-                                      : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                                      : "text-white hover:bg-gray-800 hover:text-white",
                                     "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                                   )}
                                 >
@@ -142,8 +148,6 @@ export default function HomePage() {
                             ))}
                           </ul>
                         </li>
-
-                      
                       </ul>
                     </nav>
                   </div>
@@ -175,7 +179,7 @@ export default function HomePage() {
                           className={classNames(
                             item.current
                               ? "bg-gray-800 text-white"
-                              : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                              : "text-white hover:bg-gray-800 hover:text-white",
                             "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                           )}
                         >
@@ -189,8 +193,6 @@ export default function HomePage() {
                     ))}
                   </ul>
                 </li>
-
-                
               </ul>
             </nav>
           </div>
@@ -214,12 +216,10 @@ export default function HomePage() {
             />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-              <h1 className="flex justify-left items-center w-11/12 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-               Welcome to Code Combos
+              <h1 className="justify-left flex w-11/12 items-center text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                Welcome to Code Combos
               </h1>{" "}
-              <div className="flex items-center w-2/12 gap-x-4 lg:gap-x-6">
-               
-
+              <div className="flex w-2/12 items-center gap-x-4 lg:gap-x-6">
                 {/* Separator */}
                 <div
                   className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
@@ -233,11 +233,12 @@ export default function HomePage() {
                       <div>
                         <Menu.Button className="flex max-w-sm items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                           <img
-                            className="h-8 w-8 rounded-full mr-12"
+                            className="mr-12 h-8 w-8 rounded-full"
                             src={session.user.image || DefaultImage.src}
                           />
                           <span className="text-xl">
-                          Hi, {session.user.name}!</span>
+                            Hi, {session.user.name}!
+                          </span>
                         </Menu.Button>
                       </div>
                       <Transition
@@ -252,8 +253,8 @@ export default function HomePage() {
                         <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <button
+                               
                                 onClick={() => signOut()}
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
@@ -261,7 +262,7 @@ export default function HomePage() {
                                 )}
                               >
                                 Sign out
-                              </a>
+                              </button>
                             )}
                           </Menu.Item>
                         </Menu.Items>
@@ -283,9 +284,8 @@ export default function HomePage() {
           </div>
 
           <main className="">
-            <div className="">{/* Your content */}
-            <HomeContent/>
-            
+            <div className="">
+            {children}
             </div>
           </main>
         </div>
@@ -293,3 +293,4 @@ export default function HomePage() {
     </>
   );
 }
+export default Layout;

@@ -17,7 +17,7 @@ const features = [
   {
     name: "Innovative Tech Stack",
     description:
-      "Code Combos is more than just a collection of tools; it’s a launchpad for innovation. Our platform offers a comprehensive tech stack that empowers you to explore new trends, test cutting-edge technologies, and develop skills that are in high demand in the industry.",
+      "Code Combos is more than just a collection of tools; its a launchpad for innovation. Our platform offers a comprehensive tech stack that empowers you to explore new trends, test cutting-edge technologies, and develop skills that are in high demand in the industry.",
     href: "#",
     icon: ComputerDesktopIcon,
   },
@@ -30,7 +30,7 @@ const features = [
   },
 ];
 
-export default function Example() {
+export default function HomePageContent() {
   return (
     <div className="bg-white py-24 sm:py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -42,7 +42,7 @@ export default function Example() {
             Unleash Your Potential with Code Combos
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Whether you're taking your first steps in web development or looking
+            Whether you&apo;sre taking your first steps in web development or looking
             to sharpen your existing skills, Code Combos provides the resources
             and guidance needed to elevate your projects from concept to code.
           </p>
