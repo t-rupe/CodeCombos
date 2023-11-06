@@ -42,7 +42,7 @@ export default function HomePageContent() {
             Unleash Your Potential with Code Combos
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Whether you're taking your first steps in web development or looking
+            Whether you&apos;re taking your first steps in web development or looking
             to sharpen your existing skills, Code Combos provides the resources
             and guidance needed to elevate your projects from concept to code.
           </p>

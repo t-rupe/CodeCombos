@@ -245,7 +245,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <Menu.Button className="flex max-w-sm items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                           <img
                             className="mr-12 h-8 w-8 rounded-full"
-                            src={session.user.image || DefaultImage.src}
+                            src={session.user.image ?? DefaultImage.src}
                           />
                           <span className="text-xl">
                             Hi, {session.user.name}!

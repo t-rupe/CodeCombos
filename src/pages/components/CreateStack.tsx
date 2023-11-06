@@ -323,13 +323,13 @@ export default function CreateStack() {
                       </button>
 
                       <h2 className="text-2xl font-bold text-indigo-600">
-                        🚀 Project Idea: "Local Eats Explorer"
+                        🚀 Project Idea: &quot;Local Eats Explorer&quot;
                       </h2>
                       <h3 className="text-lg font-semibold text-gray-900">
                         📝 Project Description:
                       </h3>
                       <p className="text-gray-600">
-                        The "Local Eats Explorer" is a web application designed
+                        The &quot;Local Eats Explorer&quot; is a web application designed
                         to help users discover and support local restaurants in
                         their area. Users can search for restaurants by
                         location, cuisine, rating, or current deals. Each
