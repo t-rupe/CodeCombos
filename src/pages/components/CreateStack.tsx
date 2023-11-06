@@ -9,9 +9,8 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 
-type SelectedOptionsType = {
-  [key: string]: string;
-};
+type SelectedOptionsType = Record<string, string>;
+
 
 const filters = [
   {
@@ -257,7 +256,7 @@ export default function CreateStack() {
                             {section.options.map((option, optionIdx) => {
                               const disabled = isOptionDisabled(
                                 section.id,
-                                option.value as string,
+                                option.value,
                               );
                               return (
                                 <div
