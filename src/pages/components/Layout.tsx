@@ -55,7 +55,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   
   const handleNavItemClick = (href: string) => {
     // Simply push the new route using Next.js router
-    router.push(href);
+    void router.push(href);
   };
 
   return (
