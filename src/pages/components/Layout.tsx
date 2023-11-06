@@ -21,16 +21,12 @@ import HomeContent from "./HomePageContent";
 import CreateStack from "./CreateStack";
 import { useRouter } from "next/router";
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  {
-    name: "Get New Stack",
-    href: "/createstack",
-    icon: UsersIcon,
-    current: false,
-  },
-  
-];
+type NavItem = {
+  name: string;
+  href: string;
+  icon: React.ForwardRefExoticComponent<React.RefAttributes<SVGSVGElement>>;
+};
+
 type LayoutProps = {
   children: React.ReactNode; // This allows any valid JSX content
 };
@@ -45,6 +41,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
+
+  const navigation: NavItem[] = [
+    { name: "Dashboard", href: "/", icon: HomeIcon },
+    { name: "Get New Stack", href: "/createstack", icon: UsersIcon },
+    // ... other nav items
+  ];
+
+  const isCurrentPage = (href: string) => {
+    return router.pathname === href;
+  };
+
+  
+  const handleNavItemClick = (href: string) => {
+    // Simply push the new route using Next.js router
+    router.push(href);
+  };
 
   return (
     <>
@@ -126,17 +138,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                               <li key={item.name}>
                                 <a
                                   href={item.href}
+                                  onClick={(e) => {
+                                    e.preventDefault(); // Prevent default anchor link behavior
+                                    handleNavItemClick(item.href); // Handle click and update state
+                                  }}
                                   className={classNames(
-                                    item.current
+                                    isCurrentPage(item.href )
                                       ? "bg-gray-800 text-white"
                                       : "text-white hover:bg-gray-800 hover:text-white",
                                     "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                                   )}
                                 >
-                                  <item.icon
-                                    className="h-6 w-6 shrink-0"
-                                    aria-hidden="true"
-                                  />
+                                 
                                   {item.name}
                                 </a>
                               </li>
@@ -171,17 +184,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       <li key={item.name}>
                         <a
                           href={item.href}
+                          onClick={(e) => {
+                            e.preventDefault(); // Prevent default anchor link behavior
+                            handleNavItemClick(item.href); // Handle click and update state
+                            console.log("clicked")
+
+                          }}
                           className={classNames(
-                            item.current
-                              ? "bg-gray-800 text-white"
-                              : "text-white hover:bg-gray-800 hover:text-white",
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
+                            isCurrentPage(item.href)
+                            ? "bg-gray-800 text-white"
+                              : "text-white hover:bg-gray-800  hover:text-white",
+                            "group flex gap-x-3 rounded-md p-2 text-xl font-semibold leading-6",
                           )}
                         >
-                          <item.icon
-                            className="h-6 w-6 shrink-0"
-                            aria-hidden="true"
-                          />
+                         
                           {item.name}
                         </a>
                       </li>
@@ -249,7 +265,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                           <Menu.Item>
                             {({ active }) => (
                               <button
-                               
                                 onClick={() => signOut()}
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
@@ -279,13 +294,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
 
           <main className="">
-            <div className="">
-            {children}
-            </div>
+            <div className="">{children}</div>
           </main>
         </div>
       </div>
     </>
   );
-}
+};
 export default Layout;

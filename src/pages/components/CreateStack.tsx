@@ -86,8 +86,6 @@ export default function CreateStack() {
     return !!selectedOptions[category] && selectedOptions[category] !== value;
   };
 
-  
-
   const [projectGenerated, setProjectGenerated] = useState(false);
 
   const handleGenerateProject = () => {
@@ -313,16 +311,16 @@ export default function CreateStack() {
               <div className="flex flex-col items-center justify-center">
                 {projectGenerated ? (
                   // Display the generated project idea
-                  
+
                   <div id="content" className="border p-6 lg:col-span-3 ">
                     <div className="space-y-4">
-                    <button
-      type="button"
-      className="mt-4 rounded-md bg-gray-200 px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-      onClick={handleBack}
-    >
-      ← Back to Customization
-    </button>
+                      <button
+                        type="button"
+                        className="mt-4 rounded-md bg-gray-200 px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                        onClick={handleBack}
+                      >
+                        ← Back to Customization
+                      </button>
 
                       <h2 className="text-2xl font-bold text-indigo-600">
                         🚀 Project Idea: "Local Eats Explorer"
@@ -372,20 +370,32 @@ export default function CreateStack() {
                       <h3 className="text-md font-semibold text-gray-900">
                         🛠️ Additional Tools:{" "}
                       </h3>
-                      <p>
-                        Docker 🐳: Use Docker to containerize the application,
-                        ensuring that it works consistently across different
-                        development and production environments. Google Maps API
-                        🗺️: Integrate with Google Maps API to allow users to
-                        view restaurant locations and get directions. Stripe API
-                        💳: Implement Stripe for handling online payments when
-                        users place an order or book a table. Socket.IO 💬: Use
+                      <h3 className="text-md font-semibold text-gray-900">
+                        🐳 Docker:
+                      </h3>
+                      <p> Use Docker to containerize the application, ensuring
+                        that it works consistently across different development
+                        and production environments.</p>
+                        <h3 className="text-md font-semibold text-gray-900">🗺️ Google Maps API :</h3>
+                        <p>Integrate with Google Maps API to allow users to view
+                        restaurant locations and get directions.</p>
+                        <h3 className="text-md font-semibold text-gray-900">💳 Stripe:</h3>
+                        <p> Implement Stripe for handling online payments when users
+                        place an order or book a table.</p>
+                        <h3 className="text-md font-semibold text-gray-900">💬 Socket.IO:</h3>
+                        <p>Use
                         Socket.IO to enable real-time bidirectional event-based
                         communication for a live chat support feature for users
-                        to interact with restaurant owners. Jest 🧪: Utilize
+                        to interact with restaurant owners.</p>
+                        <h3 className="text-md font-semibold text-gray-900">🧪 Jest:</h3>
+                        <p>Utilize
                         Jest for writing unit and integration tests for both
                         frontend and backend code to ensure application
-                        reliability. This project not only provides a useful
+                        reliability.</p>
+                        
+                      <p className="text-indigo-700">
+                     
+                        This project not only provides a useful
                         service for food enthusiasts but also supports local
                         businesses by giving them an online presence and direct
                         channel to potential customers.
