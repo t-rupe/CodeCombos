@@ -245,7 +245,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="px-4 py-2">
                         <span className="block text-sm font-medium text-gray-900">
-                          What's New?
+                          What&apos;s New?
                         </span>
                         <span className="block text-sm text-gray-500">
                           Placeholder text for future updates.
