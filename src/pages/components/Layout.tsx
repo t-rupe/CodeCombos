@@ -52,7 +52,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return router.pathname === href;
   };
 
-  
   const handleNavItemClick = (href: string) => {
     // Simply push the new route using Next.js router
     void router.push(href);
@@ -143,13 +142,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                     handleNavItemClick(item.href); // Handle click and update state
                                   }}
                                   className={classNames(
-                                    isCurrentPage(item.href )
+                                    isCurrentPage(item.href)
                                       ? "bg-gray-800 text-white"
                                       : "text-white hover:bg-gray-800 hover:text-white",
                                     "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                                   )}
                                 >
-                                 
                                   {item.name}
                                 </a>
                               </li>
@@ -187,17 +185,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                           onClick={(e) => {
                             e.preventDefault(); // Prevent default anchor link behavior
                             handleNavItemClick(item.href); // Handle click and update state
-                            console.log("clicked")
-
+                            console.log("clicked");
                           }}
                           className={classNames(
                             isCurrentPage(item.href)
-                            ? "bg-gray-800 text-white"
+                              ? "bg-gray-800 text-white"
                               : "text-white hover:bg-gray-800  hover:text-white",
                             "group flex gap-x-3 rounded-md p-2 text-xl font-semibold leading-6",
                           )}
                         >
-                         
                           {item.name}
                         </a>
                       </li>
@@ -227,10 +223,37 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-              <h1 className="justify-left flex w-11/12 items-center text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+              <h1 className="justify-left flex w-10/12 items-center text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                 Welcome to Code Combos
               </h1>{" "}
               <div className="flex w-2/12 items-center gap-x-4 lg:gap-x-6">
+                {/* Notification Dropdown */}
+                <Menu as="div" className="relative lg:mr-4">
+                  <Menu.Button className="flex items-center text-gray-700 hover:text-gray-900">
+                    <span className="sr-only">Open notifications</span>
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-200"
+                    enterFrom="transform opacity-0 translate-y-1"
+                    enterTo="transform opacity-100 translate-y-0"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="transform opacity-100 translate-y-0"
+                    leaveTo="transform opacity-0 translate-y-1"
+                  >
+                    <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="px-4 py-2">
+                        <span className="block text-sm font-medium text-gray-900">
+                          What's New?
+                        </span>
+                        <span className="block text-sm text-gray-500">
+                          Placeholder text for future updates.
+                        </span>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
                 {/* Separator */}
                 <div
                   className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
