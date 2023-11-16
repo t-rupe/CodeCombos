@@ -13,6 +13,7 @@ import { get } from "http";
 
 type SelectedOptionsType = Record<string, string>;
 
+
 const filters = [
   {
     id: "frontend",
@@ -88,14 +89,13 @@ export default function CreateStack() {
 
   const [projectGenerated, setProjectGenerated] = useState(false);
   const [projectIdea, setProjectIdea] = useState<string | null>(null);
-  const generateProjectIdea =
-    api.generateRandomIdea.generateProjectIdea.useMutation();
+  const generateProjectIdea = api.generateRandomIdea.generateProjectIdea.useMutation();
   const [parsedData, setParsedData] = useState({
-    frontend: "",
-    backend: "",
-    database: "",
+    frontend: '',
+    backend: '',
+    database: '',
     tools: [],
-    projectIdea: "",
+    projectIdea: '',
   });
 
   const handleGenerateProject = async () => {
@@ -105,81 +105,70 @@ export default function CreateStack() {
       setParsedData(parsed); // Set the parsed data to state
       setProjectGenerated(true); // Update state to show the project idea
     } catch (error) {
-      console.error("Error generating project:", error);
+      console.error('Error generating project:', error);
       // Handle error state
     }
   };
-  const handleBack = () => {
-    // Reset the state related to the generated project idea
-    setProjectGenerated(false);
-    setProjectIdea(null);
+const handleBack = () => {
+  // Reset the state related to the generated project idea
+  setProjectGenerated(false);
+  setProjectIdea(null);
 
-    // If there are additional states to reset (like form fields or selections),
-    // reset them here as well
+  // If there are additional states to reset (like form fields or selections),
+  // reset them here as well
+};
+const parseResponse = (response) => {
+  // Split the response into different sections
+  const sections = response.split(/[#^$*!]/);
+  
+  // Initialize an object to hold parsed data
+  const parsedData = {
+    frontend: '',
+    backend: '',
+    database: '',
+    tools: [],
+    projectIdea: '',
   };
-  const parseResponse = (response) => {
-    // Initialize an object to hold parsed data
-    const parsedData = {
-      frontend: '',
-      backend: '',
-      database: '',
-      tools: [],
-      projectTitle: '',
-      projectIdea: '',
-    };
-  
-    // Split the response into lines
-    const lines = response.split(/\r?\n/);
-  
-    // Iterate over the lines and parse the content
-    lines.forEach((line, index) => {
-      if (line.startsWith('🚀 Project Idea:')) {
-        // Capture the project title
-        parsedData.projectTitle = line.replace('🚀 Project Idea:', '').trim();
-      } else if (line.startsWith('The')) {
-        // Start capturing the project idea from this line until the end of the paragraph
-        parsedData.projectIdea += line.trim() + ' ';
-        let nextLine = lines[index + 1];
-        while (nextLine && !nextLine.startsWith('🔧')) {
-          parsedData.projectIdea += nextLine.trim() + ' ';
-          nextLine = lines[++index + 1];
-        }
-      } else if (line.includes('Frontend Technology:')) {
-        parsedData.frontend += line.split('Frontend Technology:')[1].trim() + '\n';
-      } else if (line.includes('Backend Technology:')) {
-        parsedData.backend += line.split('Backend Technology:')[1].trim() + '\n';
-      } else if (line.includes('Database:')) {
-        parsedData.database += line.split('Database:')[1].trim() + '\n';
-      } else if (line.includes('Additional Tools:')) {
-        // Do nothing, as the following lines will be captured as tools
-      } else if (line.trim() && !line.includes('Category:') && !line.includes('Difficulty:') && !line.includes('Use Case:') && !line.includes('Documentation:')) {
-        // This captures the technology names for the tools section
-        parsedData.tools.push(line.trim());
-      }
-    });
-  
-    // Remove the last whitespace from the project idea if it exists
-    parsedData.projectIdea = parsedData.projectIdea.trim();
-  
-    return parsedData;
-  };
-    // JSX to render the structured data
-    const renderSection = (sectionData, emoji, title) => {
-      // Split the section data into lines
-      const lines = sectionData.split('\n');
-    
-      // Return a JSX element for the section
-      return (
-        <div>
-          <h3 className="text-md font-semibold text-gray-900">
-            {emoji} {title}:
-          </h3>
-          {lines.map((line, index) => (
-            <p key={index}>{line}</p>
-          ))}
-        </div>
-      );
-    };
+
+  // Process each section
+  sections.forEach((section) => {
+    // Split the section into lines
+    const lines = section.trim().split('\n');
+
+    // Determine the type of section and process accordingly
+    if (lines[0].includes('Frontend')) {
+      parsedData.frontend = lines.join('\n');
+    } else if (lines[0].includes('Backend')) {
+      parsedData.backend = lines.join('\n');
+    } else if (lines[0].includes('Database')) {
+      parsedData.database = lines.join('\n');
+    } else if (lines[0].includes('Additional tools')) {
+      parsedData.tools = lines.slice(1); // Skip the first line as it's a title
+    } else if (lines[0].includes('Project Idea')) {
+      parsedData.projectIdea = lines.join('\n');
+    }
+  });
+
+  return parsedData;
+};
+
+// Usage example
+
+const renderTechSection = (techInfo) => {
+  const lines = techInfo.split('\n');
+  const title = lines[0];
+  const details = lines.slice(1);
+
+  return (
+    <div>
+      <h3 className="text-md font-semibold text-gray-900">{title}</h3>
+      {details.map((detail, index) => (
+        <p key={index}>{detail}</p>
+      ))}
+    </div>
+  );
+};
+
 
   return (
     <div className="bg-white">
@@ -406,30 +395,34 @@ export default function CreateStack() {
                       </button>
 
                       {projectGenerated && (
-                        <div id="content" className="border p-6 lg:col-span-3">
-    <h2 className="text-2xl font-bold text-indigo-600">
-      🚀 Project Idea: {parsedData.projectTitle}
-    </h2>
-    <p className="text-gray-600">
-      {parsedData.projectIdea}
-    </p>
-    <h2 className="text-lg font-semibold text-gray-900">
-      🔧 Tech Stack:
-    </h2>
-    {renderSection(parsedData.frontend, "🌐", "Frontend Technology")}
-    {renderSection(parsedData.backend, "💾", "Backend Technology")}
-    {renderSection(parsedData.database, "🗄️", "Database")}
-    <h3 className="text-md font-semibold text-gray-900">
-      🛠️ Additional Tools:
-    </h3>
-    {parsedData.tools.map((tool, index) => (
-      <p key={index}>{tool}</p>
-    ))}
-                        </div>
-                      )}
+        <div id="content" className="border p-6 lg:col-span-3">
+          <h2 className="text-2xl font-bold text-indigo-600">
+            🚀 Project Idea: {parsedData.projectIdea.split('\n')[0]}
+          </h2>
+          <h3 className="prose-2xl font-semibold text-gray-900">
+            📝 Project Description:
+          </h3>
+          <p className="text-gray-600 prose-base ">
+            {parsedData.projectIdea.split('\n').slice(1).join(' ')}
+          </p>
+          <h2 className="prose-2xl font-semibold text-gray-900">
+            🔧 Tech Stack:
+          </h2>
+          <div className="prose">{renderTechSection(parsedData.frontend)}
+          {renderTechSection(parsedData.backend)}
+          {renderTechSection(parsedData.database)}</div>
+          <h3 className="text-md font-semibold text-gray-900">🛠️ Additional Tools:</h3>
+          {parsedData.tools.map((tool, index) => (
+            <div key={index}>
+              {tool}
+            </div>
+          ))}
+
+        </div>
+      )}
                     </div>
                   </div>
-                ) : (
+      ) : (
                   // Display the instructions for stack customization
                   <div id="content" className="border p-6">
                     <div className="space-y-4">
