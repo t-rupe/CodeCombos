@@ -8,9 +8,10 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
+import { api } from "../../utils/api";
+import { get } from "http";
 
 type SelectedOptionsType = Record<string, string>;
-
 
 const filters = [
   {
@@ -86,16 +87,99 @@ export default function CreateStack() {
   };
 
   const [projectGenerated, setProjectGenerated] = useState(false);
+  const [projectIdea, setProjectIdea] = useState<string | null>(null);
+  const generateProjectIdea =
+    api.generateRandomIdea.generateProjectIdea.useMutation();
+  const [parsedData, setParsedData] = useState({
+    frontend: "",
+    backend: "",
+    database: "",
+    tools: [],
+    projectIdea: "",
+  });
 
-  const handleGenerateProject = () => {
-    // Logic to generate project details
-    setProjectGenerated(true);
+  const handleGenerateProject = async () => {
+    try {
+      const result = await generateProjectIdea.mutateAsync({}); // Call API
+      const parsed = parseResponse(result); // Parse the response
+      setParsedData(parsed); // Set the parsed data to state
+      setProjectGenerated(true); // Update state to show the project idea
+    } catch (error) {
+      console.error("Error generating project:", error);
+      // Handle error state
+    }
   };
-
   const handleBack = () => {
-    // Assuming you have a way to set the 'projectGenerated' state to false
+    // Reset the state related to the generated project idea
     setProjectGenerated(false);
+    setProjectIdea(null);
+
+    // If there are additional states to reset (like form fields or selections),
+    // reset them here as well
   };
+  const parseResponse = (response) => {
+    // Initialize an object to hold parsed data
+    const parsedData = {
+      frontend: '',
+      backend: '',
+      database: '',
+      tools: [],
+      projectTitle: '',
+      projectIdea: '',
+    };
+  
+    // Split the response into lines
+    const lines = response.split(/\r?\n/);
+  
+    // Iterate over the lines and parse the content
+    lines.forEach((line, index) => {
+      if (line.startsWith('🚀 Project Idea:')) {
+        // Capture the project title
+        parsedData.projectTitle = line.replace('🚀 Project Idea:', '').trim();
+      } else if (line.startsWith('The')) {
+        // Start capturing the project idea from this line until the end of the paragraph
+        parsedData.projectIdea += line.trim() + ' ';
+        let nextLine = lines[index + 1];
+        while (nextLine && !nextLine.startsWith('🔧')) {
+          parsedData.projectIdea += nextLine.trim() + ' ';
+          nextLine = lines[++index + 1];
+        }
+      } else if (line.includes('Frontend Technology:')) {
+        parsedData.frontend += line.split('Frontend Technology:')[1].trim() + '\n';
+      } else if (line.includes('Backend Technology:')) {
+        parsedData.backend += line.split('Backend Technology:')[1].trim() + '\n';
+      } else if (line.includes('Database:')) {
+        parsedData.database += line.split('Database:')[1].trim() + '\n';
+      } else if (line.includes('Additional Tools:')) {
+        // Do nothing, as the following lines will be captured as tools
+      } else if (line.trim() && !line.includes('Category:') && !line.includes('Difficulty:') && !line.includes('Use Case:') && !line.includes('Documentation:')) {
+        // This captures the technology names for the tools section
+        parsedData.tools.push(line.trim());
+      }
+    });
+  
+    // Remove the last whitespace from the project idea if it exists
+    parsedData.projectIdea = parsedData.projectIdea.trim();
+  
+    return parsedData;
+  };
+    // JSX to render the structured data
+    const renderSection = (sectionData, emoji, title) => {
+      // Split the section data into lines
+      const lines = sectionData.split('\n');
+    
+      // Return a JSX element for the section
+      return (
+        <div>
+          <h3 className="text-md font-semibold text-gray-900">
+            {emoji} {title}:
+          </h3>
+          {lines.map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
+        </div>
+      );
+    };
 
   return (
     <div className="bg-white">
@@ -321,84 +405,28 @@ export default function CreateStack() {
                         ← Back to Customization
                       </button>
 
-                      <h2 className="text-2xl font-bold text-indigo-600">
-                        🚀 Project Idea: &quot;Local Eats Explorer&quot;
-                      </h2>
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        📝 Project Description:
-                      </h3>
-                      <p className="text-gray-600">
-                        The &quot;Local Eats Explorer&quot; is a web application designed
-                        to help users discover and support local restaurants in
-                        their area. Users can search for restaurants by
-                        location, cuisine, rating, or current deals. Each
-                        restaurant will have a profile with a menu, photos, user
-                        reviews, and the option to book a table or order food
-                        online. On the backend, restaurant owners can manage
-                        their profile, update their menu, and respond to
-                        reviews.
-                      </p>
-                      <h2 className="text-lg font-semibold text-gray-900">
-                        🔧 Tech Stack:
-                      </h2>
-                      <h3 className="text-md font-semibold text-gray-900">
-                        🌐 Frontend Technology: React.js
-                      </h3>
-                      <p>
-                        React.js will provide a dynamic and responsive user
-                        interface. Its component-based architecture makes it
-                        easy to manage the state of the restaurant profiles,
-                        user reviews, and search functionality
-                      </p>
-                      <h3 className="text-md font-semibold text-gray-900">
-                        💾 Backend Technology: Node.js
-                      </h3>
-                      <p>
-                        Node.js will serve as the runtime environment with
-                        Express framework simplifying the creation of RESTful
-                        APIs to interact with the frontend.
-                      </p>
-                      <h3 className="text-md font-semibold text-gray-900">
-                        🗄️ Database: MongoDB{" "}
-                      </h3>
-                      <p>
-                        MongoDB is a NoSQL database that is perfect for handling
-                        the schema-less data of various restaurants, user
-                        profiles, and reviews.
-                      </p>
-                      <h3 className="text-md font-semibold text-gray-900">
-                        🛠️ Additional Tools:{" "}
-                      </h3>
-                      <h3 className="text-md font-semibold text-gray-900">
-                        🐳 Docker:
-                      </h3>
-                      <p> Use Docker to containerize the application, ensuring
-                        that it works consistently across different development
-                        and production environments.</p>
-                        <h3 className="text-md font-semibold text-gray-900">🗺️ Google Maps API :</h3>
-                        <p>Integrate with Google Maps API to allow users to view
-                        restaurant locations and get directions.</p>
-                        <h3 className="text-md font-semibold text-gray-900">💳 Stripe:</h3>
-                        <p> Implement Stripe for handling online payments when users
-                        place an order or book a table.</p>
-                        <h3 className="text-md font-semibold text-gray-900">💬 Socket.IO:</h3>
-                        <p>Use
-                        Socket.IO to enable real-time bidirectional event-based
-                        communication for a live chat support feature for users
-                        to interact with restaurant owners.</p>
-                        <h3 className="text-md font-semibold text-gray-900">🧪 Jest:</h3>
-                        <p>Utilize
-                        Jest for writing unit and integration tests for both
-                        frontend and backend code to ensure application
-                        reliability.</p>
-                        
-                      <p className="text-indigo-700">
-                     
-                        This project not only provides a useful
-                        service for food enthusiasts but also supports local
-                        businesses by giving them an online presence and direct
-                        channel to potential customers.
-                      </p>
+                      {projectGenerated && (
+                        <div id="content" className="border p-6 lg:col-span-3">
+    <h2 className="text-2xl font-bold text-indigo-600">
+      🚀 Project Idea: {parsedData.projectTitle}
+    </h2>
+    <p className="text-gray-600">
+      {parsedData.projectIdea}
+    </p>
+    <h2 className="text-lg font-semibold text-gray-900">
+      🔧 Tech Stack:
+    </h2>
+    {renderSection(parsedData.frontend, "🌐", "Frontend Technology")}
+    {renderSection(parsedData.backend, "💾", "Backend Technology")}
+    {renderSection(parsedData.database, "🗄️", "Database")}
+    <h3 className="text-md font-semibold text-gray-900">
+      🛠️ Additional Tools:
+    </h3>
+    {parsedData.tools.map((tool, index) => (
+      <p key={index}>{tool}</p>
+    ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : (
