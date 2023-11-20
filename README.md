@@ -1,6 +1,4 @@
 # Microservice API Documentation
-This README provides detailed instructions on how to interact with the microservice API that has been implemented as part of this project.
-
 # Overview
 This microservice provides an API to fetch user data from Karim's Firebase database. It responds to HTTP GET requests and returns user information based on the provided email.
 
