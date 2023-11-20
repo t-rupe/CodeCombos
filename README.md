@@ -21,13 +21,11 @@ fetch('https://codecombos.vercel.app/api/sendusers?email=user@example.com')
 
 # How to Receive Data
 The microservice responds with JSON-formatted data. Below is an example of the response format:
-
-json
-Copy code
 {
   "name": "John Doe",
   "email": "johndoe@example.com",
-  "address": "123 Main St, Anytown, USA"
+  "password": "1234",
+  "address": "Seattle, Washington."
 }
 
 # Response Structure
