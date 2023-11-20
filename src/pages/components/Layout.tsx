@@ -18,7 +18,6 @@ import {
 import { signIn, signOut, useSession } from "next-auth/react";
 import DefaultImage from "../../../public/defaultprofilepic.png";
 import HomeContent from "./HomePageContent";
-import CreateStack from "./CreateStack";
 import { useRouter } from "next/router";
 
 type NavItem = {
