@@ -34,3 +34,6 @@ address: The address of the user.
 Error Handling
 In case of an error (like a user not found), the API responds with an appropriate HTTP status code and an error message. For example:
  "error": "User not found."
+
+![UMLSequence](https://github.com/t-rupe/codecombos/assets/111811756/b5382bbc-fe05-4db4-a488-4b17e16b5633)
+
