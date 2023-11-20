@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import admin from '../../../utils/firebaseAdmin';
+import admin, { initializeFirebaseAdmin } from '../../utils/firebaseAdmin';
+import { initialize } from 'next/dist/server/lib/render-server';
 
 export default async function userHandler(req: NextApiRequest, res: NextApiResponse) {
+    initializeFirebaseAdmin();
   try {
     // Ensure we're receiving a GET request
     if (req.method !== 'GET') {
