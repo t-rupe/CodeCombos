@@ -4,8 +4,10 @@ import { initialize } from 'next/dist/server/lib/render-server';
 
 export default async function userHandler(req: NextApiRequest, res: NextApiResponse) {
     initializeFirebaseAdmin();
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Adjust this to allow specific origins as needed
+    res.setHeader('Access-Control-Allow-Methods', 'GET'); // Specify the allowed HTTP method(s)
+  
   try {
-    // Ensure we're receiving a GET request
     if (req.method !== 'GET') {
       res.setHeader('Allow', ['GET']);
       return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -27,7 +29,6 @@ export default async function userHandler(req: NextApiRequest, res: NextApiRespo
 
     return res.status(200).json(doc.data());
   } catch (error) {
-    // Handle any errors
     return res.status(500).json({ error: error });
   }
 }
