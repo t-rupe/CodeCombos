@@ -4,8 +4,18 @@ import { initialize } from 'next/dist/server/lib/render-server';
 
 export default async function userHandler(req: NextApiRequest, res: NextApiResponse) {
     initializeFirebaseAdmin();
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Adjust this to allow specific origins as needed
-    res.setHeader('Access-Control-Allow-Methods', 'GET'); // Specify the allowed HTTP method(s)
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    res.setHeader('Access-Control-Allow-Methods', 'GET'); 
+
+    if (req.method === 'OPTIONS') {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Access-Control-Max-Age', '3600'); // Max age for the OPTIONS request
+      res.status(204).end(); // Send response with no content
+      return;
+    }
+  
   
   try {
     if (req.method !== 'GET') {
