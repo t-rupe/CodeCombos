@@ -30,7 +30,7 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts"
-, "src/server/api/getRandomProjectIdea.ts"    
+    
   ],
   "exclude": ["node_modules"]
 }
