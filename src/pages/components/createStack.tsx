@@ -16,52 +16,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 type SelectedOptionsType = Record<string, string>;
 
 
-const filters = [
-  {
-    id: "frontend",
-    name: "Frontend",
-    options: [
-      { value: "react", label: "React", checked: false },
-      { value: "angular", label: "Angular", checked: false },
-      { value: "vue", label: "Vue.js", checked: false },
-      { value: "svelte", label: "Svelte", checked: false },
-    ],
-  },
-  {
-    id: "backend",
-    name: "Backend",
-    options: [
-      { value: "nodejs", label: "Node.js", checked: false },
-      { value: "django", label: "Django", checked: false },
-      { value: "rubyonrails", label: "Ruby on Rails", checked: false },
-      { value: "spring", label: "Spring", checked: false },
-    ],
-  },
-  {
-    id: "database",
-    name: "Database",
-    options: [
-      { value: "postgresql", label: "PostgreSQL", checked: false },
-      { value: "mongodb", label: "MongoDB", checked: false },
-      { value: "mysql", label: "MySQL", checked: false },
-      { value: "redis", label: "Redis", checked: false },
-    ],
-  },
-  {
-    id: "tools",
-    name: "Additional Tools",
-    options: [
-      { value: "docker", label: "Docker", checked: false },
-      { value: "kubernetes", label: "Kubernetes", checked: false },
-      { value: "jenkins", label: "Jenkins", checked: false },
-      { value: "webpack", label: "Webpack", checked: false },
-    ],
-  },
-];
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function CreateStack() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptionsType>({
@@ -92,6 +46,17 @@ export default function CreateStack() {
   const [projectGenerated, setProjectGenerated] = useState(false);
   const [partnerURLs, setPartnerURLs] = useState({});
 
+  interface ProjectIdea {
+    title: string;
+    description: string;
+    urls: string;
+    frontend_technology_id: number;
+    backend_technology_id: number;
+    database_id: number;
+    styling_library_id: number;
+    deployment_id: number;
+  }
+
   const [projectIdea, setProjectIdea] = useState({
     title: '',
     description: '',
@@ -103,40 +68,17 @@ export default function CreateStack() {
     deployment_id: '',
   });
 
-  const fetchRandomProjectIdea = async () => {
-    // Generate a random number between 3 and 22 (1 to 10 as per your requirement)
-    const randomId = Math.floor(Math.random() * 20) + 3;
-  
-    const { data, error } = await supabase
-      .from('project_ideas')
-      .select('*')
-      .eq('id', randomId)
-      .single();
-  
-    if (error) {
-      console.error('Error fetching project idea:', error);
-      return null;
-    }
-    return data;
-  };
 
-  const fetchPartnerURLs = async (input) => {
-    try {
-      const response = await axios.post('https://elitemma.vercel.app/api/partner/geturl', {
-        frontend: input.frontendId,
-        backend: input.backendId,
-        database: input.databaseId,
-        styling: input.stylingLibraryId,
-        deployment: input.deploymentId
-      });
-      return response.data;
-    } catch (error) {
-      console.error(`Failed to fetch URLs: ${error}`);
-      throw new Error(`Failed to fetch URLs: ${error}`);
-    }
-  };
-  
-  
+
+  interface PartnerURLsInput {
+    frontendId: number;
+    backendId: number;
+    databaseId: number;
+    stylingLibraryId: number;
+    deploymentId: number;
+}
+
+
   
   const fetchTechnology = async (table:string, id: number) => {
     const { data, error } = await supabase
@@ -152,70 +94,122 @@ export default function CreateStack() {
     return data;
   };
   
-  useEffect(() => {
-    const fetchAllData = async () => {
-      // Fetch the random project idea
-      const projectIdeaData = await fetchRandomProjectIdea();
+  const handleGenerateProject = async () => {
+    // Generate a random ID for the project idea
+    const randomId = Math.floor(Math.random() * 17) + 1;
   
-      if (projectIdeaData) {
-        setProjectIdea(projectIdeaData);
-        console.log("Project Idea:", projectIdeaData);
+    // Fetch the project idea from your database
+    const { data, error } = await supabase
+      .from('project_ideas')
+      .select('*')
+      .eq('id', randomId)
+      .single();
   
-        // Fetch technologies using the project idea data
-        const frontendTech = await fetchTechnology('frontend_technologies', projectIdeaData.frontend_technology_id);
-        const backendTech = await fetchTechnology('backend_technologies', projectIdeaData.backend_technology_id);
-        const databaseTech = await fetchTechnology('databases', projectIdeaData.database_id);
-        const stylingLib = await fetchTechnology('styling_libraries', projectIdeaData.styling_library_id);
-        const deploymentTech = await fetchTechnology('deployment', projectIdeaData.deployment_id);
+    if (error) {
+      console.error('Error fetching project idea:', error);
+      return;
+    }
   
-        // Store technologies in state or use them as needed
-        if (frontendTech) {
-          // Handle frontendTech data
-        }
-        if (backendTech) {
-          // Handle backendTech data
-        }
-        if (databaseTech) {
-          // Handle databaseTech data
-        }
-        if (stylingLib) {
-          // Handle stylingLib data
-        }
-        if (deploymentTech) {
-          // Handle deploymentTech data
-        }
+    // Set the fetched project idea to state
+    setProjectIdea(data);
+    console.log("Project Idea:", data);
   
-        // Prepare input for partnerURLs
-        console.log
-        const input = {
-          frontend: projectIdeaData.frontend_technology_id,
-          backend: projectIdeaData.backend_technology_id,
-          database: projectIdeaData.database_id,
-          styling: projectIdeaData.styling_library_id,
-          deployment: projectIdeaData.deployment_id
-        };
-        console.log("input", input)
-  
-        // Fetch partner URLs
-        const partnerURLData = await fetchPartnerURLs(input);
-  
-        if (partnerURLData) {
-          // Store partner URLs in state
-          setPartnerURLs(partnerURLData);
-          console.log("Partner URLs:", partnerURLData);
-        }
-      }
+    // Prepare the input for the partner's microservice request
+    const input: PartnerURLsInput = {
+      frontendId: data.frontend_technology_id,
+      backendId: data.backend_technology_id,
+      databaseId: data.database_id,
+      stylingLibraryId: data.styling_library_id,
+      deploymentId: data.deployment_id,
     };
   
-    // Fetch all data when component mounts
-    fetchAllData();
-  }, []);
- 
+    // Fetch the URLs from the partner's microservice
+    try {
+      const partnerURLData = await fetchPartnerURLs(input);
+      setPartnerURLs(partnerURLData);
+      setProjectGenerated(true);
+    } catch (error) {
+      console.error('Failed to fetch URLs from partner microservice:', error);
+    }
+  };
+  
+  const fetchPartnerURLs = async (input: PartnerURLsInput) => {
+    try {
+      const response = await axios.post('/api/serverfetch', {
+        frontend: input.frontendId,
+        backend: input.backendId,
+        database: input.databaseId,
+        styling: input.stylingLibraryId,
+        deployment: input.deploymentId
+      });
+      console.log("response from partner microservice", response);
+      return response;
+    } catch (error) {
+      console.error(`Failed to fetch URLs: ${error}`);
+      throw new Error(`Failed to fetch URLs: ${error}`);
+    }
+  };
+  
+  const handleBack = () => {
+    setProjectGenerated(false);
+    setProjectIdea({
+      title: '',
+      description: '',
+      urls: '',
+      frontend_technology_id: '',
+      backend_technology_id: '',
+      database_id: '',
+      styling_library_id: '',
+      deployment_id: '',
+    });
+    setPartnerURLs({});
+  };
 
+  
 
   return (
-    <div className="bg-white">
-    hi 
+    <div className="bg-gray-100 p-6 min-h-screen flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow p-8 max-w-2xl mx-auto">
+        {projectGenerated ? (
+          // Display the generated project idea
+          <>
+            <div className="space-y-4">
+              <button
+                type="button"
+                className="rounded-md bg-gray-200 px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 mb-4"
+                onClick={handleBack}
+              >
+                ← Back to Customization
+              </button>
+            </div>
+            <h2 className="text-2xl font-bold text-indigo-600">
+              🚀 Project Idea: {projectIdea.title}
+            </h2>
+            <div
+              className="prose prose-indigo mt-4"
+              dangerouslySetInnerHTML={{ __html: projectIdea.description }}
+            />
+            {/* Render additional project details andtech stack URLs */}
+          </>
+        ) : (
+          // Display the instructions for stack customization
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900">
+              How to Customize Your Stack
+            </h2>
+            <p className="text-gray-600">
+              Welcome to the Project Generator! Follow these steps to customize the tech stack for your new project.
+            </p>
+            <button
+              type="button"
+              className="mt-4 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={handleGenerateProject}
+            >
+              Generate Project
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
