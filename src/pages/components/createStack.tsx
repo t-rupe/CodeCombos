@@ -6,9 +6,9 @@ import { api } from "../../utils/api";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "undefined";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "undefined";
 const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "undefined";
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "undefined";
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 
@@ -124,7 +124,6 @@ export default function CreateStack() {
             deployment: input.deploymentId,
           });
       
-          // Assuming response.data is of the type PartnerURLs
           console.log("response from partner microservice", response.data);
           return response.data;
         } catch (error) {
@@ -153,7 +152,6 @@ export default function CreateStack() {
     setProjectIdea(data);
     console.log("Project Idea:", data);
 
-    // Prepare the input for the partner's microservice request
     const input: PartnerURLsInput = {
       frontendId: data.frontend_technology_id,
       backendId: data.backend_technology_id,
