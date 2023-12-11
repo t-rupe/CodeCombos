@@ -81,7 +81,7 @@ export default function HomePageContent() {
         <Link
           href="/createstack/"
           className="rounded-md bg-indigo-600 px-5 py-3 text-base font-semibold text-white shadow-lg hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600 transition ease-in-out duration-150"
-          style={{ fontSize: '1.125rem', lineHeight: '1.75rem' }} // Tailwind classes for text-lg and leading-snug
+          style={{ fontSize: '1.125rem', lineHeight: '1.75rem' }} 
         >
           Get your stack
         </Link>

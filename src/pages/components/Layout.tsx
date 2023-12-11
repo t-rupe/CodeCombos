@@ -44,7 +44,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigation: NavItem[] = [
     { name: "Dashboard", href: "/", icon: HomeIcon },
     { name: "Get New Stack", href: "/createstack", icon: UsersIcon },
-    // ... other nav items
   ];
 
   const isCurrentPage = (href: string) => {
@@ -52,7 +51,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const handleNavItemClick = (href: string) => {
-    // Simply push the new route using Next.js router
     void router.push(href);
   };
 
@@ -119,7 +117,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       </button>
                     </div>
                   </Transition.Child>
-                  {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
                       <img
@@ -164,7 +161,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
               <img
@@ -246,9 +242,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <span className="block text-sm font-medium text-gray-900">
                           What&apos;s New?
                         </span>
-                        <span className="block text-sm text-gray-500">
-                          Placeholder text for future updates.
+                        <span className="block text-sm text-black">
+                          Filtered Options! 
                         </span>
+                        <span className="block text-sm text-black">You can now filter your stack instead of just getting a random combo!</span>
                       </div>
                     </Menu.Items>
                   </Transition>
@@ -269,7 +266,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             className="mr-12 h-8 w-8 rounded-full"
                             src={session.user.image ?? DefaultImage.src}
                           />
-                          <span className="text-xl">
+                          <span className="text-sm">
                             Hi, {session.user.name}!
                           </span>
                         </Menu.Button>

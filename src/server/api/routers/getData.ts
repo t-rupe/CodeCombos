@@ -29,7 +29,7 @@ export const getDataRouter = createTRPCRouter({
     return data;
   }),
 
-  // Fetch technology details by IDs and get URLs from the partner's microservice
+  // Fetch technology details by IDs and get URLs from microservice
   getTechnologyDetails: publicProcedure
     .input(z.object({
       frontendId: z.number(),
