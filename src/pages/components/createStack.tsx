@@ -1,8 +1,6 @@
-import { Fragment, useState, useEffect } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import {  Disclosure } from "@headlessui/react";
 import { MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
-import { api } from "../../utils/api";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 
@@ -11,16 +9,6 @@ const supabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "undefined";
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-interface ProjectIdea {
-  title: string;
-  description: string;
-  urls: string;
-  frontend_technology_id: number;
-  backend_technology_id: number;
-  database_id: number;
-  styling_library_id: number;
-  deployment_id: number;
-}
 
 interface PartnerURLs {
   [key: string]: string;
@@ -168,7 +156,7 @@ export default function CreateStack() {
   };
 
   const handleGenerateProject = async () => {
-    setIsLoading(true); // Set loading to true when operation starts
+    setIsLoading(true); 
 
     try {
       // Determine which technology category is selected and its value
@@ -250,7 +238,7 @@ export default function CreateStack() {
   };
 
   const handleRandomizeSelection = async () => {
-    setIsLoading(true); // Set loading to true when operation starts
+    setIsLoading(true); 
 
     const fetchPartnerURLs = async (
       input: PartnerURLsInput,
@@ -306,7 +294,7 @@ export default function CreateStack() {
     } catch (error) {
       console.error("Failed to fetch URLs from partner microservice:", error);
     }
-    setIsLoading(false); // Set loading to false when operation is completed
+    setIsLoading(false); 
   };
 
   return (
@@ -316,7 +304,6 @@ export default function CreateStack() {
           <h1 className="text-4xl font-bold tracking-tight text-gray-900">
             Stack Customization
           </h1>
-          {/* Other header elements */}
         </div>
 
         <section aria-labelledby="stack-heading" className="pb-24 pt-6">

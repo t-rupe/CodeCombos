@@ -56,15 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
-      <div className="bg-gra">
+      <div className="bg-gray">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"

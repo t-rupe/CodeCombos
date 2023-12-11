@@ -1,6 +1,5 @@
 import * as admin from 'firebase-admin';
 
-// A flag to check if Firebase has been initialized
 let firebaseInitialized = false;
 
 export const initializeFirebaseAdmin = () => {
